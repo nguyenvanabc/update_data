@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seoul Trip 2026 – Firebase Data Seeder</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .status.info {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .status.success {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .status.error {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    button.primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 10px;
+      max-height: 500px;
+      overflow: auto;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .warning {
+      background: #fffbeb;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      border-radius: 10px;
+      padding: 14px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🇰🇷 Seoul Trip 2026</h1>
+  <div class="subtitle">
+    Firebase / Firestore data setup
+  </div>
+
+  <div id="status" class="status info">
+    Đang khởi tạo Firebase...
+  </div>
+
+  <div class="card">
+
+    <h2>Google Account</h2>
+
+    <div id="userInfo" class="hidden">
+      <div class="user">
+        <img id="userPhoto" src="" alt="Avatar">
+        <div>
+          <strong id="userName"></strong><br>
+          <span id="userEmail"></span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="saveBtn" class="primary">
+          💾 SAVE TO FIREBASE
+        </button>
+
+        <button id="logoutBtn" class="secondary">
+          Đăng xuất
+        </button>
+      </div>
+    </div>
+
+    <div id="loginArea">
+      <button id="loginBtn" class="primary">
+        🔐 Đăng nhập bằng Google
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Trip data</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <strong id="activityCount">0</strong>
+        <span>Activities</span>
+      </div>
+
+      <div class="stat">
+        <strong id="placeCount">0</strong>
+        <span>Places</span>
+      </div>
+
+      <div class="stat">
+        <strong id="dspCount">0</strong>
+        <span>DSP attractions</span>
+      </div>
+
+      <div class="stat">
+        <strong id="milestoneCount">0</strong>
+        <span>Milestones</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Firestore structure</h2>
+
+    <pre>
+trips/
+└── seoul-2026/
+    ├── settings/
+    │   └── main
+    │
+    ├── places/
+    │   ├── kyung-hee-university
+    │   ├── hwarangdae-railway-park
+    │   ├── nami-island
+    │   └── ...
+    │
+    ├── activities/
+    │   ├── 2026-10-18-01
+    │   ├── 2026-10-18-02
+    │   └── ...
+    │
+    ├── milestones/
+    │   ├── flight-han-icn
+    │   └── flight-icn-han
+    │
+    ├── dsp/
+    │   ├── main
+    │   ├── football-fantasium
+    │   ├── seoul-zoo-sky-lift
+    │   ├── aquafield-goyang
+    │   └── ...
+    │
+    └── notes/
+        └── planning
+    </pre>
+
+    <div class="warning">
+      <strong>Lưu ý:</strong>
+      DSP attractions được lưu trực tiếp dưới
+      <code>trips/seoul-2026/dsp/</code>.
+      Không sử dụng đường dẫn
+      <code>dsp/attractions/...</code>
+      vì Firestore yêu cầu document reference phải có số segment chẵn.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>JSON Preview</h2>
+
+    <pre id="preview"></pre>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  writeBatch,
+  deleteDoc,
+  collection,
+  getDocs,
+  serverTimestamp,
+  deleteField
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCoHYgOL4hAs4ECxz8iMrc8d9458dOth3Q",
+  authDomain: "seol-8eb80.firebaseapp.com",
+  projectId: "seol-8eb80",
+  storageBucket: "seol-8eb80.firebasestorage.app",
+  messagingSenderId: "545533388832",
+  appId: "1:545533388832:web:441dad1a09916bb14eb445",
+  measurementId: "G-MZQ5L465GV"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+const TRIP_ID = "seoul-2026";
+
+
+/* =========================================================
+   UI
+   ========================================================= */
+
+const statusEl = document.getElementById("status");
+
+const loginBtn = document.getElementById("loginBtn");
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+const saveBtn = document.getElementById("saveBtn");
+
+const loginArea = document.getElementById("loginArea");
+
+const userInfo = document.getElementById("userInfo");
+
+const userName = document.getElementById("userName");
+
+const userEmail = document.getElementById("userEmail");
+
+const userPhoto = document.getElementById("userPhoto");
+
+const preview = document.getElementById("preview");
+
+
+function setStatus(message, type = "info") {
+
+  statusEl.textContent = message;
+
+  statusEl.className = `status ${type}`;
+
+}
+
+
+/* =========================================================
+   PLACES
+   ========================================================= */
+
+const places = [
+  {
+    id: "home-nowon",
+    name: "Home – Nowon",
+    address: "Nowon-gu, Seoul, South Korea",
+    lat: 37.62536,
+    lng: 127.07348,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nowon-gu+Seoul",
+    naverMapsUrl: "https://map.naver.com/p/search/Nowon-gu%20Seoul",
+    description: `<div class="place-description">
+  <h4>🏡 Nowon-gu (노원구) – Khu dân cư xanh & Thủ phủ giáo dục phía Bắc Seoul</h4>
+  <p><b>Lịch sử & Phát triển:</b> Tên gọi "Nowon" xuất phát từ thời triều đại Joseon, nguyên nghĩa là "cánh đồng lau sậy" nằm ở cửa ngõ phía Bắc kinh thành Hanyang. Trong lịch sử, đây từng là trạm dừng chân quan trọng của du khách và thương nhân di chuyển giữa Seoul và các tỉnh phía Bắc. Đến thập niên 1980, chính quyền thành phố Seoul thực hiện quy hoạch đô thị hóa quy mô lớn, biến Nowon từ khu vực nông nghiệp thành một quận đô thị hiện đại với hạ tầng giao thông đồng bộ.</p>
+  <p><b>Đặc điểm nổi bật:</b> Nowon nằm dưới chân hai ngọn núi hùng vĩ là Suraksan và Buramsan, đem lại không gian sống thoáng đãng, nhiều cây xanh và không khí trong lành vượt trội so với khu trung tâm sầm uất. Quận sở hữu hệ thống công viên sinh thái dốc núi cùng các tuyến đường đi bộ ven sông Jungnangcheon vô cùng thơ mộng.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thủ phủ giáo dục:</b> Phường Junggye-dong thuộc quận Nowon được mệnh danh là "Daechi-dong của phía Bắc", nơi tập trung hàng trăm trung tâm học thêm (Hagwon) uy tín, là nơi đào tạo ra nhiều thế hệ học sinh xuất sắc của Hàn Quốc.</li>
+    <li><b>Kết nối giao thông:</b> Nhờ có các tuyến tàu điện ngầm huyết mạch Line 4 và Line 7, từ Nowon có thể di chuyển thẳng tới các điểm du lịch lớn như Myeongdong, Dongdaemun hay Gangnam mà không cần chuyển tàu.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "incheon-airport-t1",
+    name: "Incheon International Airport Terminal 1",
+    address: "272 Gonghang-ro, Jung-gu, Incheon, South Korea",
+    lat: 37.46020,
+    lng: 126.44070,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Incheon+International+Airport+Terminal+1",
+    naverMapsUrl: "https://map.naver.com/p/search/Incheon%20International%20Airport%20Terminal%201",
+    description: `<div class="place-description">
+  <h4>✈️ Incheon International Airport T1 (인천국제공항 제1여객터미널)</h4>
+  <p><b>Lịch sử hình thành:</b> Được chính thức khai trương vào tháng 3 năm 2001 nhằm thay thế cho Sân bay Gimpo đã quá tải, Sân bay Quốc tế Incheon là công trình cơ sở hạ tầng hàng không lớn nhất Hàn Quốc. Việc xây dựng nhà ga T1 là một kỳ tích kỹ thuật lấn biển, kết nối hai hòn đảo Yeongjong và Yongyu để tạo nên một đảo nhân tạo khổng lồ phục vụ hàng không quốc tế.</p>
+  <p><b>Thiết kế & Trải nghiệm:</b> Nhà ga T1 do kiến trúc sư nổi tiếng Curtis Fentress thiết kế, lấy cảm hứng từ hình dáng thanh thoát của cánh diều truyền thống Hàn Quốc và các đường nét uyển chuyển của mái nhà Hanok. Nơi đây không chỉ là điểm transit mà còn là một trung tâm văn hóa nghỉ dưỡng tích hợp với vườn thực vật trong nhà, khu mua sắm miễn thuế khổng lồ, spa tắm hơi Jimjilbang, rạp chiếu phim và Bảo tàng Văn hóa Hàn Quốc.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Đỉnh cao dịch vụ:</b> Liên tục giữ vị trí số 1 trong danh sách "Sân bay tốt nhất thế giới" do Hội đồng Cảng hàng không Quốc tế (ACI) đánh giá trong suốt 12 năm liền.</li>
+    <li><b>Trình diễn văn hóa:</b> Hàng ngày tại sảnh chính T1 đều diễn ra các buổi diễu hành và biểu diễn âm nhạc cổ truyền do các nghệ sĩ mặc trang phục hoàng gia Joseon tái hiện.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "kyung-hee-university",
+    name: "Kyung Hee University",
+    address: "26 Kyungheedae-ro, Dongdaemun-gu, Seoul",
+    lat: 37.59616,
+    lng: 127.05252,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kyung+Hee+University+Seoul",
+    naverMapsUrl: "https://map.naver.com/p/search/Kyung%20Hee%20University",
+    description: `<div class="place-description">
+  <h4>🏛️ Kyung Hee University (경희대학교) – Đỉnh cao kiến trúc Gothic giữa lòng Seoul</h4>
+  <p><b>Lịch sử & Sứ mệnh:</b> Thành lập vào năm 1949 bởi Tiến sĩ Young Seek Choue với triết lý "Sáng tạo một thế giới văn minh", Đại học Kyung Hee là một trong những trường đại học tư thục danh giá và lâu đời nhất Hàn Quốc. Trường nổi tiếng thế giới về các ngành Y học cổ truyền Hàn Quốc, Khách sạn - Du lịch và Âm nhạc nghệ thuật.</p>
+  <p><b>Kiến trúc độc đáo:</b> Khuôn viên khuôn viên Seoul của Đại học Kyung Hee nổi tiếng toàn cầu bởi vẻ đẹp tráng lệ mang đậm phong cách Tân Gothic Châu Âu. Nổi bật nhất là tòa nhà <i>Grand Peace Palace</i> (Hội trường Hòa Bình) với các ngọn tháp nhọn và vòm đá chạm khắc tinh xảo giống như một đại thánh đường cổ kính ở Châu Âu.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thánh địa hoa anh đào:</b> Vào mùa xuân, con đường dẫn vào trường ngợp trong sắc hoa của hơn 200 cây anh đào cổ thụ, trở thành điểm tham quan ngắm hoa nổi tiếng bậc nhất Seoul.</li>
+    <li><b>Ngôi trường của ngôi sao:</b> Đây là alma mater (trường cũ) của rất nhiều ngôi sao Hallyu đình đám như Bi Rain, G-Dragon, Kyuhyun (Super Junior), actor Gong Yoo và Tổng thống Hàn Quốc Moon Jae-in.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "hwarangdae-railway-park",
+    name: "Hwarangdae Railway Park",
+    address: "1455 Gongneung-dong, Nowon-gu, Seoul",
+    lat: 37.62382,
+    lng: 127.08535,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Hwarangdae+Railway+Park",
+    naverMapsUrl: "https://map.naver.com/p/search/Hwarangdae%20Railway%20Park",
+    description: `<div class="place-description">
+  <h4>🚂 Hwarangdae Railway Park (화랑대철도공원) – Công viên di sản đường sắt hoài cổ</h4>
+  <p><b>Lịch sử biến đổi:</b> Ga Hwarangdae ban đầu được xây dựng vào năm 1939 thời kỳ thuộc địa với tên gọi "Ga Taereung", thuộc tuyến đường sắt Gyeongchun Line kết nối Seoul với Chuncheon. Năm 2010, tuyến đường sắt cũ chính thức ngừng hoạt động. Thay vì tháo dỡ, chính quyền quận Nowon đã bảo tồn toàn bộ nhà ga và đường ray để biến nơi đây thành một công viên di sản văn hóa đường sắt độc đáo.</p>
+  <p><b>Điểm tham quan hấp dẫn:</b> Khuôn viên công viên trưng bày nhiều đầu máy hơi nước cổ điển, toa tàu điện Mika-3, tàu điện ngầm cũ của Seoul và thậm chí cả tàu điện hoài cổ được mang về từ Cộng hòa Séc và Nhật Bản. Tòa nhà ga gỗ cổ vẫn giữ nguyên vẹn nội thất thập niên 1950, hiện được sử dụng làm bảo tàng lịch sử đường sắt.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Di sản quốc gia:</b> Tòa nhà ga Hwarangdae cũ được công nhận là Di sản Văn hóa Quốc gia số 300 của Hàn Quốc nhờ kiến trúc mái gỗ bất đối xứng cực kỳ hiếm hoi.</li>
+    <li><b>Nox-turnal Light Garden:</b> Ban đêm, toàn bộ công viên biến thành "Khu vườn ánh sáng" với hàng ngàn đèn LED nghệ thuật và trình diễn chiếu sáng 3D hoành tráng.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "nami-island",
+    name: "Nami Island",
+    address: "1 Namiseom-gil, Namsan-myeon, Chuncheon-si, Gangwon-do",
+    lat: 37.80587,
+    lng: 127.52558,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Nami+Island+Korea",
+    naverMapsUrl: "https://map.naver.com/p/search/Nami%20Island",
+    description: `<div class="place-description">
+  <h4>🍁 Nami Island (남이섬) – Đảo ngọc tình yêu & Biểu tượng Hallyu huyền thoại</h4>
+  <p><b>Lịch sử & Nguồn gốc:</b> Đảo Nami là một hòn đảo hình bán nguyệt rộng khoảng 460.000 m², được hình thành khi nước sông Bukhangang dâng cao do xây dựng Đập thủy điện Cheongpyeong vào năm 1944. Đảo được đặt theo tên của Tướng quân Nami – vị tướng trẻ tuổi tài ba thời Joseon đã có công dẹp loạn vào thế kỷ 15 và được an táng tại khu vực phía Bắc của đảo.</p>
+  <p><b>Cảnh quan thiên nhiên:</b> Đảo nổi tiếng với những hàng cây rợp bóng đổi màu theo bốn mùa: hoa anh đào hồng thắm mùa xuân, hàng cây tùng bách xanh mướt mùa hè, hàng cây ngân hạnh (Ginkgo) dát vàng rực rỡ mùa thu và tuyết trắng bao phủ lãng mạn mùa đông.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Cộng hòa Naminara:</b> Năm 2006, Đảo Nami tuyên bố "độc lập tự do" về mặt văn hóa và tự xưng là "Cộng hòa Naminara", có hộ chiếu, tem thư và đồng tiền riêng phục vụ du lịch.</li>
+    <li><b>Trái tim của Bản Tình Ca Mùa Đông:</b> Nơi đây là bối cảnh quay chính của bộ phim truyền hình kinh điển <i>Winter Sonata (2002)</i>, tác phẩm đã khởi đầu cho làn sóng văn hóa Hallyu lan rộng khắp Châu Á.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "gwangjang-market",
+    name: "Gwangjang Market",
+    address: "88 Changgyeonggung-ro, Jongno-gu, Seoul",
+    lat: 37.57022,
+    lng: 126.99951,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Gwangjang+Market",
+    naverMapsUrl: "https://map.naver.com/p/search/Gwangjang%20Market",
+    description: `<div class="place-description">
+  <h4>🥞 Gwangjang Market (광장시장) – Chợ truyền thống 100 năm tuổi & Thiên đường ẩm thực</h4>
+  <p><b>Lịch sử lâu đời:</b> Được thành lập vào năm 1905, Gwangjang là chợ tư nhân cố định đầu tiên trong lịch sử Hàn Quốc. Trong thời kỳ thuộc địa, chợ được người dân Hàn Quốc góp vốn xây dựng để duy trì hoạt động thương mại độc lập của người bản địa. Trải qua hơn một thế kỷ, nơi đây vẫn giữ nguyên vẻ sầm uất và trở thành di sản văn hóa sống của thủ đô Seoul.</p>
+  <p><b>Văn hóa ẩm thực:</b> Chợ chia thành hai khu vực chính: khu vải vóc hanbok truyền thống ở tầng trên và thiên đường ẩm thực đường phố sầm uất ở tầng dưới. Du khách có thể thưởng thức các món ăn đặc sản như <i>Bindaetteok</i> (bánh kếp đậu xanh chiên giòn), <i>Yukhoe</i> (gỏi thịt bò tươi trứng sống) và <i>Mayak Gimbap</i> (gimbap gây nghiện).</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ngôi sao Netflix:</b> Quầy bán bánh kếp và mì Kalguksu tại chợ đã trở thành hiện tượng toàn cầu sau khi xuất hiện nổi bật trong bộ phim tài liệu <i>Street Food: Asia</i> của Netflix.</li>
+    <li><b>Ý nghĩa tên gọi:</b> Tên gọi "Gwangjang" ban đầu được ghép từ tên của hai cây cầu nằm ở hai đầu chợ là Gwanggyo và Janggyo.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "dongmyo-market",
+    name: "Dongmyo Flea Market",
+    address: "Dongmyo-dong, Jongno-gu, Seoul",
+    lat: 37.57310,
+    lng: 127.01770,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Dongmyo+Flea+Market",
+    naverMapsUrl: "https://map.naver.com/p/search/Dongmyo%20Flea%20Market",
+    description: `<div class="place-description">
+  <h4>📜 Dongmyo Flea Market (동묘 벼룩시장) – Chợ đồ cũ Vintage độc đáo nhất Seoul</h4>
+  <p><b>Nguồn gốc lịch sử:</b> Chợ đồ cũ Dongmyo hình thành tự phát từ thập niên 1980 xung quanh Đền Dongmyo (Đền Đông 관왕묘) – nơi thờ Quan Vũ được xây dựng từ năm 1601 dưới thời Vua Seonjo với sự trợ giúp của nhà Minh. Ban đầu, đây là nơi các thương nhân cao tuổi tập trung trao đổi đồ cũ, đĩa hát và đồ cổ.</p>
+  <p><b>Môi trường mua sắm:</b> Chợ là một kho báu khổng lồ ngoài trời với hàng trăm gian hàng đổ đống đủ các loại hàng hóa: từ quần áo vintage thập niên 80-90, máy ảnh cơ, đĩa than vinyl, đồ điện tử cổ cho đến sách cũ và đồ gia dụng độc lạ với giá siêu rẻ.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thánh địa của Hipster:</b> Nhờ sự lăng xê của ca sĩ G-Dragon và nghệ sĩ hài Jung Hyung-don trong chương trình <i>Infinite Challenge</i>, nơi đây đã biến thành điểm săn đồ thời trang vintage số 1 của giới trẻ Seoul.</li>
+    <li><b>Văn hóa ngã giá:</b> Nơi đây là một trong số ít những khu chợ tại Seoul nơi du khách có thể tự do trả giá và trải nghiệm phong cách mua bán dân dã truyền thống.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "ewha-womans-university",
+    name: "Ewha Womans University",
+    address: "52 Ewhayeodae-gil, Seodaemun-gu, Seoul",
+    lat: 37.55663,
+    lng: 126.94503,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ewha+Womans+University",
+    naverMapsUrl: "https://map.naver.com/p/search/Ewha%20Womans%20University",
+    description: `<div class="place-description">
+  <h4>🌸 Ewha Womans University (이화여자대학교) – Đại học nữ thục hàng đầu thế giới</h4>
+  <p><b>Lịch sử vẻ vang:</b> Được thành lập vào năm 1886 bởi nhà truyền giáo người Mỹ Mary F. Scranton dưới thời Vua Gojong, Ewha là cơ sở giáo dục đại học đầu tiên dành riêng cho nữ giới tại Hàn Quốc. Nơi đây đã đào tạo ra vô số nữ chính trị gia, nhà khoa học và nhà lãnh đạo kiệt xuất cho đất nước.</p>
+  <p><b>Kiến trúc đẳng cấp thế giới:</b> Khuôn viên trường là sự kết hợp tuyệt mỹ giữa các tòa nhà đá phong cách Gothic cổ kính và công trình kiến trúc hiện đại <i>ECC (Ewha Campus Complex)</i> do kiến trúc sư lừng danh Dominique Perrault thiết kế. ECC là một "thung lũng ngầm" kính khổng lồ tích hợp thư viện, rạp chiếu phim và phòng học chìm dưới lòng đất.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ý nghĩa tên gọi:</b> Tên gọi "Ewha" (Lê Hoa) do chính Vua Gojong ban tặng, lấy cảm hứng từ những cánh hoa lê trắng nở rộ gần học viện ban đầu.</li>
+    <li><b>Chữ "Womans" độc đáo:</b> Tên tiếng Anh của trường dùng từ "Womans" (thay vì Women's) để nhấn mạnh sự tôn trọng tính cá nhân riêng biệt của từng người phụ nữ.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "haneul-park",
+    name: "Haneul Park",
+    address: "95 Haneulgongwon-ro, Mapo-gu, Seoul",
+    lat: 37.56821,
+    lng: 126.88547,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Haneul+Park+Seoul",
+    naverMapsUrl: "https://map.naver.com/p/search/Haneul%20Park",
+    description: `<div class="place-description">
+  <h4>🌾 Haneul Park (하늘공원) – Công viên Bầu trời & Kỳ tích sinh thái</h4>
+  <p><b>Kỳ tích phục hồi sinh thái:</b> Ít ai biết rằng từ năm 1978 đến 1993, khu vực Nanjido này từng là bãi rác chính của thủ đô Seoul với ngọn núi rác khổng lồ. Nhằm chuẩn bị cho World Cup 2002, chính quyền Seoul đã thực hiện dự án tái sinh sinh thái quy mô lớn, biến bãi rác cũ thành Công viên World Cup gồm 5 công viên nhỏ, trong đó Haneul Park là công viên nằm ở vị trí cao nhất.</p>
+  <p><b>Cảnh quan thơ mộng:</b> Nằm trên đỉnh ngọn đồi cao, du khách phải vượt qua 291 bậc thang gỗ (hoặc đi xe điện Frog Tram) để lên tới đỉnh. Nơi đây sở hữu đồng cỏ lau bạc (Eulalia) bạt ngàn lung linh trong gió và những cánh đồng cỏ hồng (Pink Muhly) tuyệt đẹp mỗi độ thu về.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ý nghĩa tên gọi:</b> "Haneul" trong tiếng Hàn có nghĩa là "Bầu trời", tượng trưng cho không gian bao la mở ra ngay sát mây trời.</li>
+    <li><b>Năng lượng sạch:</b> Công viên vận hành hoàn toàn bằng năng lượng xanh nhờ 5 tua-bin gió khổng lồ dựng trên đỉnh đồi.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "suwon-hwaseong",
+    name: "Suwon Hwaseong Fortress",
+    address: "Suwon, Gyeonggi-do, South Korea",
+    lat: 37.28740,
+    lng: 127.01260,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Suwon+Hwaseong+Fortress",
+    naverMapsUrl: "https://map.naver.com/p/search/Suwon%20Hwaseong",
+    description: `<div class="place-description">
+  <h4>🏰 Suwon Hwaseong Fortress (수원화성) – Kiệt tác pháo đài Di sản UNESCO</h4>
+  <p><b>Lịch sử & Lòng hiếu thảo:</b> Pháo đài Hwaseong được xây dựng từ năm 1794 đến 1796 dưới triều Vua Jeongjo (Chính Tổ) thời Joseon. Mục đích xây thành nhằm di dời mộ phần của người cha quá cố – Trang Tỉnh Thế tử (Sado Seja) về vùng đất địa linh nhân kiệt Suwon, đồng thời củng cố quyền lực hoàng gia và xây dựng một đô thị thương mại mới.</p>
+  <p><b>Đỉnh cao kỹ thuật quân sự:</b> Thành quách kéo dài gần 5,74 km bao quanh trung tâm thành phố Suwon. Công trình là sự kết hợp hoàn hảo giữa kỹ thuật xây đắp truyền thống Đông Á với tri thức khoa học quân sự phương Tây do học giả Silhak Jeong Yak-yong thiết kế, sử dụng cần cẩu nâng đá (Geojunggi) đầu tiên trong lịch sử Hàn Quốc.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Di sản thế giới:</b> Được UNESCO công nhận là Di sản Văn hóa Thế giới vào năm 1997 nhờ tính nguyên bản và kiến trúc phòng thủ độc đáo.</li>
+    <li><b>Cổng Janganmun:</b> Đây là cổng thành vào cố đô rộng lớn nhất tại Hàn Quốc, thậm chí còn lớn hơn cổng Sungnyemun ở Seoul.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "starfield-suwon",
+    name: "Starfield Suwon",
+    address: "175 Susaek-ro, Jangan-gu, Suwon",
+    lat: 37.28612,
+    lng: 126.99124,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Starfield+Suwon",
+    naverMapsUrl: "https://map.naver.com/p/search/Starfield%20Suwon",
+    description: `<div class="place-description">
+  <h4>📚 Starfield Suwon (스타필드 수원) – Kỳ quan mua sắm & Thư viện viễn tưởng</h4>
+  <p><b>Tổng quan dự án:</b> Chính thức mở cửa vào tháng 1 năm 2024, Starfield Suwon là trung tâm thương mại phức hợp thế hệ mới lớn nhất khu vực tỉnh Gyeonggi. Dự án được thiết kế theo xu hướng "Shopping-tainment", kết hợp giữa mua sắm thời trang cao cấp, ẩm thực Michelin, khu vui chơi thể thao Smob và không gian văn hóa nghệ thuật.</p>
+  <p><b>Thư viện Starfield ngàn sao:</b> Điểm nhấn kiến trúc gây bùng nổ truyền thông chính là Thư viện Starfield (Starfield Library) trải dài từ tầng 4 đến tầng 7. Với các kệ sách cao tới 22 mét uốn lượn hình vòm không gian cùng các hành tinh lơ lửng, nơi đây tạo nên một khung cảnh huyền ảo như trong các bộ phim khoa học viễn tưởng.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thân thiện với thú cưng:</b> Là một trong những trung tâm thương mại đầu tiên cho phép du khách dắt thú cưng đi dạo tự do bên trong và cung cấp cả công viên sân thượng dành riêng cho chó cưng.</li>
+    <li><b>Tọa độ check-in siêu hot:</b> Thu hút hơn 330.000 lượt khách ghé thăm chỉ trong 3 ngày đầu tiên mở cửa.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "korean-folk-village",
+    name: "Korean Folk Village",
+    address: "90 Minsokchon-ro, Giheung-gu, Yongin-si",
+    lat: 37.25959,
+    lng: 127.12057,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Korean+Folk+Village+Yongin",
+    naverMapsUrl: "https://map.naver.com/p/search/Korean%20Folk%20Village",
+    description: `<div class="place-description">
+  <h4>🏺 Korean Folk Village (한국민속촌) – Bảo tàng sống về đời sống thời Joseon</h4>
+  <p><b>Thành lập & Mục đích:</b> Khai trương vào năm 1974, Làng Dân tộc Hàn Quốc (Minsokchon) là bảo tàng ngoài trời quy mô lớn rộng hơn 245 mẫu Anh. Làng được xây dựng nhằm phục dựng và bảo tồn nguyên vẹn đời sống văn hóa, phong tục tập quán và kiến trúc truyền thống của người dân Hàn Quốc giai đoạn muộn thời kỳ triều đại Joseon.</p>
+  <p><b>Kiến trúc quy tụ:</b> Làng bao gồm hơn 260 ngôi nhà cổ được tháo dỡ và di dời nguyên bản từ khắp các vùng miền trên toàn quốc: từ nhà tranh nông dân, nhà quan lại quý tộc (Yangban), phủ quan huyện cho đến chùa chiền và lò gốm sứ.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Trường quay phim cổ trang:</b> Nơi đây là bối cảnh quay của vô số bộ phim truyền hình nổi tiếng thế giới như <i>Nàng Dae Jang Geum, Mặt Trăng Ôm Mặt Trời, My Love from the Star</i>.</li>
+    <li><b>Diễn viên nhập vai (NPCs):</b> Nhân viên trong làng ăn mặc và hóa thân thành các nhân vật cổ xưa (như Quan huyện, Dã nhân, Thầy bói) tương tác hài hước với du khách.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "gyeongbokgung",
+    name: "Gyeongbokgung Palace",
+    address: "161 Sajik-ro, Jongno-gu, Seoul",
+    lat: 37.57952,
+    lng: 126.97709,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Gyeongbokgung+Palace",
+    naverMapsUrl: "https://map.naver.com/p/search/Gyeongbokgung",
+    description: `<div class="place-description">
+  <h4>👑 Gyeongbokgung Palace (경복궁) – Cung Cảnh Phúc & Trái tim lịch sử Triều đại Joseon</h4>
+  <p><b>Lịch sử thăng trầm:</b> Được xây dựng vào năm 1395 bởi Vua Taejo (Thái Tổ) và cố vấn Jeong Do-jeon, Cung Cảnh Phúc là hoàng cung chính và lớn nhất trong số "Năm Đại Cung Điện" của triều đại Joseon. Cung điện đã trải qua lịch sử vô cùng đau thương: bị thiêu rụi trong cuộc xâm lược Imjin (1592), được phục dựng dưới thời Đại Viện Gun (1867), rồi lại bị chính quyền thuộc địa phá hủy phần lớn vào đầu thế kỷ 20.</p>
+  <p><b>Kiến trúc đỉnh cao:</b> Nổi bật là điện Cần 政 (Geunjeongjeon) – nơi diễn ra các lễ đăng quang và tiếp đón sứ thần, và Lầu Khánh Hội (Gyeonghoeru) – tòa lâu đài bằng gỗ nằm giữa hồ hoa sen thơ mộng chuyên tổ chức yến tiệc hoàng gia.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ý nghĩa tên gọi:</b> "Gyeongbokgung" có nghĩa là "Cung điện của Hạnh phúc Cảnh lớn", lời cầu chúc cho triều đại mới luôn thịnh vượng.</li>
+    <li><b>Miễn phí vé vào cổng:</b> Du khách mặc trang phục Hanbok truyền thống sẽ được ưu đãi miễn phí 100% vé tham quan cung điện.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "bukchon-hanok-village",
+    name: "Bukchon Hanok Village",
+    address: "Bukchon-ro, Jongno-gu, Seoul",
+    lat: 37.58239,
+    lng: 126.98587,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Bukchon+Hanok+Village",
+    naverMapsUrl: "https://map.naver.com/p/search/Bukchon%20Hanok%20Village",
+    description: `<div class="place-description">
+  <h4>🏘️ Bukchon Hanok Village (북촌한옥마을) – Làng cổ 600 năm tuổi giữa lòng thủ đô</h4>
+  <p><b>Lịch sử hình thành:</b> Nằm giữa hai cung điện Gyeongbokgung và Changdeokgung, Bukchon (Làng phía Bắc) là khu dân cư cao cấp lâu đời có lịch sử hơn 600 năm. Thời Joseon, đây là nơi sinh sống độc quyền của các hoàng thân quốc thích, quan lại triều đình và tầng lớp quý tộc (Yangban).</p>
+  <p><b>Bảo tồn kiến trúc:</b> Làng hiện bảo tồn khoảng 900 ngôi nhà gỗ truyền thống (Hanok). Những con ngõ nhỏ ngoằn ngoèo uốn lượn trên dốc cao đem lại tầm nhìn ngoạn mục hướng về các tòa tháp cao tầng hiện đại phía xa, tạo nên sự tương phản tuyệt vời giữa quá khứ và hiện tại.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Khu dân cư thực sự:</b> Không giống như các làng du lịch nhân tạo, Bukchon là khu dân cư thực sự có người dân sinh sống, vì vậy du khách luôn được nhắc nhở giữ trật tự nhẹ nhàng.</li>
+    <li><b>Tám cảnh đẹp Bukchon (Bukchon 8 Vistas):</b> Làng có 8 góc quay/chụp ảnh đẹp nhất được chính quyền Seoul đánh dấu trên mặt đường để du khách khám phá.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "insadong",
+    name: "Insadong / Ssamzigil",
+    address: "Insadong-gil, Jongno-gu, Seoul",
+    lat: 37.57144,
+    lng: 126.98632,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Insadong+Ssamzigil",
+    naverMapsUrl: "https://map.naver.com/p/search/Insadong%20Ssamzigil",
+    description: `<div class="place-description">
+  <h4>🎨 Insadong & Ssamzigil (인사동 / 쌈지길) – Phố nghệ thuật & Đồ thủ công mỹ nghệ</h4>
+  <p><b>Lịch sử phát triển:</b> Thời Joseon, Insadong là nơi tập trung các học sĩ, họa sĩ của Đồ họa viện (Dohwaseo). Sau khi triều đại suy vong, nơi đây trở thành khu vực buôn bán đồ cổ, thư pháp và tranh vẽ của giới quý tộc sa sút. Ngày nay, Insadong là con phố văn hóa nghệ thuật truyền thống sầm uất nhất Seoul.</p>
+  <p><b>Phức hợp Ssamzigil:</b> Nằm ở trung tâm con phố là Trung tâm thương mại Ssamzigil. Tòa nhà nổi tiếng với thiết kế đường dốc xoắn ốc liên tục 4 tầng không có bậc thang, nối liền hơn 70 cửa hàng thủ công mỹ nghệ, đồ gốm sứ, phụ kiện và tiệm trà truyền thống.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Bảng hiệu Hangeul đặc biệt:</b> Để bảo tồn bản sắc văn hóa, chính quyền quy định tất cả các thương hiệu quốc tế tại Insadong (bao gồm cả Starbucks) đều phải viết bảng hiệu bằng chữ thuần Hàn Hangeul.</li>
+    <li><b>Bánh Poop Cafe:</b> Tầng thượng Ssamzigil nổi tiếng với món bánh nướng hình "biểu tượng phân" độc lạ thu hút giới trẻ.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "ikseon-dong",
+    name: "Ikseon-dong",
+    address: "Ikseon-dong, Jongno-gu, Seoul",
+    lat: 37.57436,
+    lng: 126.98978,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ikseon-dong+Seoul",
+    naverMapsUrl: "https://map.naver.com/p/search/Ikseon-dong",
+    description: `<div class="place-description">
+  <h4>☕ Ikseon-dong Hanok Village (익선동) – Con phố Hanok Hipster quyến rũ nhất</h4>
+  <p><b>Lịch sử cải tạo:</b> Ikseon-dong được quy hoạch vào năm 1920 bởi nhà bất động sản tiên phong Jeong Se-kwon như một dự án nhà ở Hanok quy mô nhỏ, giá rẻ dành cho người dân thuộc tầng lớp lao động Seoul. Đây được xem là khu đô thị Hanok cải tiến đầu tiên của Hàn Quốc.</p>
+  <p><b>Sự hồi sinh ngoạn mục:</b> Bị lãng quên trong nhiều thập kỷ, khu phố đã trải qua cuộc tái thiết văn hóa bùng nổ từ năm 2014. Giới trẻ và các nghệ sĩ đã cải tạo các ngôi nhà Hanok cổ thành các quán cà phê specialty, tiệm bánh ngọt boutique, studio chụp ảnh và nhà hàng fusion mang phong cách Retro đầy sáng tạo.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ngõ hẻm siêu nhỏ:</b> Các con hẻm tại Ikseon-dong cực kỳ hẹp, chỉ vừa đủ 2 người đi song song, tạo nên không gian ấm cúng và gần gũi.</li>
+    <li><b>Món ăn đường phố:</b> Nơi đây nổi tiếng với món bánh kếp Souffle siêu mịn uốn lượn và các quán cà phê có đường ray tàu hỏa chạy bên trong.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "myeongdong-cathedral",
+    name: "Myeongdong Cathedral",
+    address: "74 Myeongdong-gil, Jung-gu, Seoul",
+    lat: 37.56327,
+    lng: 126.98726,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Myeongdong+Cathedral",
+    naverMapsUrl: "https://map.naver.com/p/search/Myeongdong%20Cathedral",
+    description: `<div class="place-description">
+  <h4>⛪ Myeongdong Cathedral (명동성당) – Nhà thờ Công giáo Gothic đầu tiên tại Hàn Quốc</h4>
+  <p><b>Lịch sử & Xây dựng:</b> Được hoàn thành vào năm 1898 dưới sự chỉ đạo của linh mục người Pháp Eugene Coste, Nhà thờ Myeongdong là nhà thờ Công giáo phong cách Gothic đầu tiên được xây dựng hoàn toàn bằng gạch nung tại Hàn Quốc. Nơi đây là tòa thánh của Tổng giáo phận Seoul và là biểu tượng của Công giáo Hàn Quốc.</p>
+  <p><b>Kiến trúc Gothic kinh điển:</b> Tòa nhà cao 45m nổi bật với tháp chuông nhọn vút lên bầu trời, được xây dựng từ hơn 20 loại gạch nung đỏ và xám khác nhau. Bên trong thánh đường là hệ thống vòm mái cao vút kết hợp với các ô cửa kính màu (stained glass) lộng lẫy mô tả các sự kiện trong Kinh Thánh.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thánh địa dân chủ:</b> Trong thập niên 1970 và 1980, nhà thờ đóng vai trò là nơi trú ẩn an toàn và là biểu tượng tinh thần cho phong trào đấu tranh đòi dân chủ hóa của sinh viên Hàn Quốc.</li>
+    <li><b>Hầm mộ thánh thể:</b> Bên dưới nhà thờ có một hầm mộ lưu giữ hài cốt của các vị tử đạo Công giáo Hàn Quốc trong các cuộc đàn áp thời Joseon.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "n-seoul-tower",
+    name: "N Seoul Tower",
+    address: "105 Namsangongwon-gil, Yongsan-gu, Seoul",
+    lat: 37.55122,
+    lng: 126.988275,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=N+Seoul+Tower",
+    naverMapsUrl: "https://map.naver.com/p/search/N%20Seoul%20Tower",
+    description: `<div class="place-description">
+  <h4>🗼 N Seoul Tower (N서울타워) – Tháp truyền hình Namsan & Biểu tượng tình yêu</h4>
+  <p><b>Lịch sử phát triển:</b> Được bắt đầu xây dựng vào năm 1969 trên đỉnh núi Namsan và chính thức mở cửa cho công chúng vào năm 1980, Tháp Namsan là tháp truyền thông tổng hợp đầu tiên của Hàn Quốc, phát sóng tín hiệu vô tuyến cho các đài TV lớn như KBS, MBC và SBS.</p>
+  <p><b>Trải nghiệm ngắm cảnh:</b> Với độ cao tháp 236,7m cộng thêm độ cao của núi Namsan, đỉnh tháp đạt độ cao 479,7m so với mực nước biển. Từ đài quan sát 360 độ, du khách có thể ngắm trọn vẹn toàn cảnh thủ đô Seoul lung linh ánh đèn về đêm.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ổ khóa tình yêu (Love Locks):</b> Khu vực sân đài dưới chân tháp nổi tiếng toàn cầu với hàng triệu khóa tình yêu được các cặp đôi móc vào hàng rào để cầu chúc cho tình yêu vĩnh cửu.</li>
+    <li><b>Đèn báo chất lượng không khí:</b> Hệ thống đèn tháp đổi màu ban đêm để báo mức độ bụi mịn: màu xanh dương (trong lành), màu xanh lá (bình thường), màu vàng (kém) và màu đỏ (nguy hại).</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "hwadam-forest",
+    name: "Hwadam Forest",
+    address: "278-1 Docheokwitangol-gil, Docheok-myeon, Gwangju-si, Gyeonggi-do",
+    lat: 37.33924,
+    lng: 127.29221,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Hwadam+Forest",
+    naverMapsUrl: "https://map.naver.com/p/search/Hwadam%20Forest",
+    description: `<div class="place-description">
+  <h4>🌲 Hwadam Forest (화담숲) – Khu sinh thái bảo tồn thiên nhiên tuyệt mỹ</h4>
+  <p><b>Sứ mệnh bảo tồn:</b> Rừng Hwadam là một arboretum (khu bảo tồn thực vật) sinh thái rộng lớn do Quỹ Koo Bon-moo của Tập đoàn LG thành lập nhằm mục đích phục hồi và bảo tồn hệ sinh thái rừng tự nhiên Hàn Quốc. Nơi đây sở hữu hơn 4.300 loài thực vật thuộc các bộ sưu tập quý hiếm.</p>
+  <p><b>Cảnh quan thiên nhiên:</b> Rừng được chia thành 16 khu vườn chủ đề khác nhau, nổi tiếng nhất là Vườn Thông cổ thụ lớn nhất Hàn Quốc, Vườn Hoa cẩm tú cầu và Vườn Phong đỏ. Du khách có thể thong dong đi bộ trên các tuyến đường gỗ dốc nhẹ hoặc trải nghiệm tuyến tàu điện Monorail đi xuyên qua tán rừng.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Ý nghĩa tên gọi:</b> "Hwadam" (Hòa Đàm - 화담) có nghĩa là "Trò chuyện chân thành", với mong muốn tạo không gian cho con người kết nối hòa hợp với thiên nhiên.</li>
+    <li><b>Thánh địa lá đỏ mùa thu:</b> Là điểm ngắm lá phong mùa thu hot nhất tỉnh Gyeonggi, vé vào cửa mùa cao điểm thu thường "cháy vé" chỉ sau vài phút mở bán online.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "banpo-hangang-park",
+    name: "Banpo Hangang Park",
+    address: "40 Banpo-dong, Seocho-gu, Seocho-gu, Seoul",
+    lat: 37.50912,
+    lng: 126.99219,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Banpo+Hangang+Park",
+    naverMapsUrl: "https://map.naver.com/p/search/Banpo%20Hangang%20Park",
+    description: `<div class="place-description">
+  <h4>🌊 Banpo Hangang Park (반포한강공원) – Công viên ven sông & Đài phun nước Cầu Banpo</h4>
+  <p><b>Tổng quan quy hoạch:</b> Là một phần của Dự án Chỉnh trang Sông Hán (Hangang Renaissance Project), Công viên Banpo nằm ở bờ Nam sông Hán, nổi tiếng với không gian sinh hoạt ngoài trời rộng lớn, các đảo nhân tạo Seavit Floating Islands và điểm ngắm hoàng hôn đắt giá.</p>
+  <p><b>Đài phun nước Moonlight Rainbow:</b> Điểm thu hút nhất là Đài phun nước Cầu Banpo kéo dài 1.140m gắn hai bên thành cầu Banpo. Hệ thống sử dụng 380 vòi phun cùng 200 ngọn đèn nhiều màu sắc trình diễn vũ điệu nước theo nhạc vô cùng mãn nhãn vào các buổi tối từ tháng 4 đến tháng 10.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Kỷ lục Guinness:</b> Đài phun nước Cầu Banpo được Kỷ lục Thế giới Guinness công nhận là "Đài phun nước trên cầu dài nhất thế giới".</li>
+    <li><b>Trải nghiệm Chimaek:</b> Nơi đây là tọa độ lý tưởng nhất để du khách gọi giao hàng tận nơi món "Chimaek" (Gà rán + Bia) và trải nghiệm ăn mì ăn liền nấu tại máy tự động ven sông.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "lotte-world",
+    name: "Lotte World",
+    address: "240 Olympic-ro, Songpa-gu, Seoul",
+    lat: 37.51132,
+    lng: 127.09825,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Lotte+World+Seoul",
+    naverMapsUrl: "https://map.naver.com/p/search/Lotte%20World",
+    description: `<div class="place-description">
+  <h4>🏰 Lotte World (롯데월드) – Phức hợp giải trí huyền thoại trong lòng Seoul</h4>
+  <p><b>Lịch sử & Quy mô:</b> Mở cửa đón khách từ tháng 7 năm 1989, Lotte World là công viên giải trí phức hợp khổng lồ do Tập đoàn Lotte phát triển. Nơi đây bao gồm hai khu vực chính: <i>Adventure</i> – công viên giải trí trong nhà khổng lồ có mái kính, và <i>Magic Island</i> – hòn đảo nhân tạo ngoài trời nằm giữa Hồ Seokchon.</p>
+  <p><b>Trò chơi & Tiện ích:</b> Nơi đây quy tụ hàng chục trò chơi cảm giác mạnh đẳng cấp thế giới như tàu tốc hành French Revolution, Atlantis, Gyro Drop, kết hợp với sân trượt băng nghệ thuật trong nhà, trung tâm mua sắm và Bảo tàng Dân gian Lotte.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Kỷ lục Guinness:</b> Khu vực trong nhà Lotte World Adventure từng nắm giữ Kỷ lục Guinness Thế giới là "Công viên giải trí trong nhà lớn nhất thế giới".</li>
+    <li><b>Văn hóa đồng phục học sinh:</b> Giới trẻ Hàn Quốc có trào lưu vô cùng nổi tiếng là thuê đồng phục học sinh trung học tại các tiệm gần cổng để mặc chụp ảnh sống ảo suốt cả ngày trong công viên.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "coex-aquarium",
+    name: "COEX Aquarium",
+    address: "513 Yeongdong-daero, Gangnam-gu, Seoul",
+    lat: 37.51318,
+    lng: 127.05835,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=COEX+Aquarium",
+    naverMapsUrl: "https://map.naver.com/p/search/COEX%20Aquarium",
+    description: `<div class="place-description">
+  <h4>🦈 COEX Aquarium (코엑스 아쿠아리움) – Thủy cung đại dương giữa trung tâm Gangnam</h4>
+  <p><b>Thành lập & Thiết kế:</b> Khai trương vào năm 2000 bên trong Trung tâm Thương mại ngầm COEX Mall, COEX Aquarium là một trong những thủy cung lớn nhất và lâu đời nhất tại Hàn Quốc. Thủy cung được thiết kế theo chủ đề "Hành trình khám phá nước", đưa du khách đi từ dòng suối vùng cao cho đến lòng đại dương sâu thẳm.</p>
+  <p><b>Đa dạng sinh học:</b> Quy tụ hơn 40.000 sinh vật biển thuộc 650 loài khác nhau, chia làm 18 khu vực trưng bày độc đáo như Vương quốc Chim cánh cụt, Khu rừng Amazon, Rạn thực vật san hô và Đường hầm thủy tinh dưới đáy biển.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Lĩnh vực Cá mập:</b> Sở hữu bộ sưu tập cá mập lớn nhất Hàn Quốc với hơn 110 con thuộc 40 loài khác nhau cư trú trong bể đại dương dung tích 2.000 tấn.</li>
+    <li><b>Bể cá sáng tạo:</b> Nổi tiếng với các bể cá được làm từ vật dụng đời thường như tủ lạnh, điện thoại công cộng, đàn piano và máy giặt.</li>
+  </ul>
+</div>`
+  },
+  {
+    id: "unseo",
+    name: "Unseo / Airport area",
+    address: "Unseo-dong, Jung-gu, Incheon",
+    lat: 37.49275,
+    lng: 126.49273,
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Unseo+Station+Incheon",
+    naverMapsUrl: "https://map.naver.com/p/search/Unseo%20Station",
+    description: `<div class="place-description">
+  <h4>🏨 Unseo Area (운서동) – Đô thị vệ tinh tiện nghi ngay sát Sân bay Incheon</h4>
+  <p><b>Tổng quan phát triển:</b> Unseo-dong là đô thị mới được quy hoạch trên đảo Yeongjongdo nhằm phục vụ các dịch vụ hậu cần, lưu trú và thương mại cho Sân bay Quốc tế Incheon. Nhờ vị trí đắc địa nằm trên tuyến tàu điện tốc hành AREX (Airport Railroad Express), nơi đây chỉ cách sân bay khoảng 8-10 phút đi tàu.</p>
+  <p><b>Môi trường du lịch:</b> Khu vực quanh Ga Unseo chia làm hai khu chính: Khu Café & Khách sạn hiện đại phía Bắc với vô số lựa chọn lưu trú giá tốt, và Khu phố ẩm thực truyền thống phía Nam tập trung nhiều nhà hàng hải sản tươi sống và BBQ Hàn Quốc.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Trạm dừng chân lý tưởng:</b> Là sự lựa chọn số 1 cho các du khách có chuyến bay muộn/sớm hoặc muốn trải nghiệm tắm biển và thưởng thức hải sản tại bãi biển Eulwangri gần đó trước khi rời Hàn Quốc.</li>
+    <li><b>Công viên Công cộng Seaside Park:</b> Nằm ngay sát biển với đường ray xe đạp chèo chân (Railbike) ven bờ biển tuyệt đẹp nhìn ra Cầu Incheon Grand Bridge.</li>
+  </ul>
+</div>`
+  }
+];
+
+
+/* =========================================================
+   ACTIVITIES
+   ========================================================= */
+
+const activities = [
+
+  /* 18/10 */
+
+  {
+    id: "2026-10-18-flight-han-icn",
+    date: "2026-10-18",
+    title: "✈️ Vietjet VJ960 – Hanoi → Seoul",
+    startTime: "01:40",
+    endTime: "07:55",
+    duration: 375,
+    type: "flight",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "incheon-airport-t1",
+    notes: "Direct flight. A321. ICN Terminal 1.",
+    order: 10
+  },
+
+  {
+    id: "2026-10-18-home-rest",
+    date: "2026-10-18",
+    title: "Về nhà / nghỉ ngơi",
+    startTime: "08:00",
+    endTime: "13:30",
+    duration: 330,
+    type: "rest",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "home-nowon",
+    notes: "Về Nowon sau khi rời sân bay.",
+    order: 20
+  },
+
+  {
+    id: "2026-10-18-kyung-hee",
+    date: "2026-10-18",
+    title: "Kyung Hee University",
+    startTime: "14:15",
+    endTime: "16:15",
+    duration: 120,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "kyung-hee-university",
+    notes: "",
+    order: 30
+  },
+
+  {
+    id: "2026-10-18-hwarangdae",
+    date: "2026-10-18",
+    title: "Hwarangdae Railway Park / Gyeongchun Line Forest",
+    startTime: "16:45",
+    endTime: "18:15",
+    duration: 90,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "hwarangdae-railway-park",
+    notes: "",
+    order: 40
+  },
+
+  {
+    id: "2026-10-18-dinner",
+    date: "2026-10-18",
+    title: "Dinner",
+    startTime: "18:30",
+    endTime: "20:00",
+    duration: 90,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "home-nowon",
+    notes: "Có thể thay đổi nhà hàng.",
+    order: 50
+  },
+
+
+  /* 19/10 */
+
+  {
+    id: "2026-10-19-nami-depart",
+    date: "2026-10-19",
+    title: "🚆 Khởi hành đi Nami Island",
+    startTime: "06:00",
+    endTime: "08:30",
+    duration: 150,
+    type: "transport",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "nami-island",
+    notes: "Không kích hoạt DSP trong ngày này.",
+    order: 10
+  },
+
+  {
+    id: "2026-10-19-nami-morning",
+    date: "2026-10-19",
+    title: "Nami Island – buổi sáng",
+    startTime: "08:30",
+    endTime: "12:00",
+    duration: 210,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "nami-island",
+    notes: "",
+    order: 20
+  },
+
+  {
+    id: "2026-10-19-nami-lunch",
+    date: "2026-10-19",
+    title: "Lunch",
+    startTime: "12:00",
+    endTime: "13:00",
+    duration: 60,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "nami-island",
+    order: 30
+  },
+
+  {
+    id: "2026-10-19-nami-afternoon",
+    date: "2026-10-19",
+    title: "Nami Island – buổi chiều",
+    startTime: "13:00",
+    endTime: "15:00",
+    duration: 120,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "nami-island",
+    order: 40
+  },
+
+  {
+    id: "2026-10-19-return-seoul",
+    date: "2026-10-19",
+    title: "🚆 Quay lại Seoul",
+    startTime: "15:00",
+    endTime: "17:30",
+    duration: 150,
+    type: "transport",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "home-nowon",
+    order: 50
+  },
+
+  {
+    id: "2026-10-19-dinner",
+    date: "2026-10-19",
+    title: "Dinner – Gongneung",
+    startTime: "18:00",
+    endTime: "19:30",
+    duration: 90,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "home-nowon",
+    notes: "Có thể kết hợp Gyeongchun Line Forest / café.",
+    order: 60
+  },
+
+
+  /* 20/10 */
+
+  {
+    id: "2026-10-20-gwangjang",
+    date: "2026-10-20",
+    title: "Gwangjang Market",
+    startTime: "09:00",
+    endTime: "10:00",
+    duration: 60,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "gwangjang-market",
+    order: 10
+  },
+
+  {
+    id: "2026-10-20-dongmyo",
+    date: "2026-10-20",
+    title: "Dongmyo 2hand Market",
+    startTime: "10:30",
+    endTime: "13:00",
+    duration: 150,
+    type: "shopping",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "dongmyo-market",
+    order: 20
+  },
+
+  {
+    id: "2026-10-20-ewha",
+    date: "2026-10-20",
+    title: "Ewha",
+    startTime: "13:30",
+    endTime: "15:00",
+    duration: 90,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "ewha-womans-university",
+    order: 30
+  },
+
+  {
+    id: "2026-10-20-haneul",
+    date: "2026-10-20",
+    title: "Haneul Park / Silver Grass Festival",
+    startTime: "16:00",
+    endTime: "21:00",
+    duration: 300,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "haneul-park",
+    notes: "Hoàng hôn + lighting/media art.",
+    order: 40
+  },
+
+
+  /* 21/10 */
+
+  {
+    id: "2026-10-21-suwon-hwaseong",
+    date: "2026-10-21",
+    title: "Suwon Hwaseong",
+    startTime: "08:15",
+    endTime: "11:30",
+    duration: 195,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "suwon-hwaseong",
+    order: 10
+  },
+
+  {
+    id: "2026-10-21-starfield",
+    date: "2026-10-21",
+    title: "Starfield Suwon",
+    startTime: "12:15",
+    endTime: "14:00",
+    duration: 105,
+    type: "shopping",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "starfield-suwon",
+    order: 20
+  },
+
+  {
+    id: "2026-10-21-folk-village",
+    date: "2026-10-21",
+    title: "Korean Folk Village",
+    startTime: "15:00",
+    endTime: "18:15",
+    duration: 195,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "korean-folk-village",
+    notes: "DSP active. Ăn tối tại đây nếu phù hợp.",
+    dsp: true,
+    order: 30
+  },
+
+  {
+    id: "2026-10-21-return",
+    date: "2026-10-21",
+    title: "🚆 Quay lại Seoul",
+    startTime: "18:15",
+    endTime: "20:30",
+    duration: 135,
+    type: "transport",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "home-nowon",
+    order: 40
+  },
+
+
+  /* 22/10 */
+
+  {
+    id: "2026-10-22-gyeongbokgung",
+    date: "2026-10-22",
+    title: "Gyeongbokgung + Hanbok",
+    startTime: "09:00",
+    endTime: "11:00",
+    duration: 120,
+    type: "attraction",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "gyeongbokgung",
+    notes: "Hanbok rental – DSP.",
+    dsp: true,
+    order: 10
+  },
+
+  {
+    id: "2026-10-22-bukchon",
+    date: "2026-10-22",
+    title: "Bukchon Hanok Village",
+    startTime: "11:00",
+    endTime: "12:30",
+    duration: 90,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "bukchon-hanok-village",
+    order: 20
+  },
+
+  {
+    id: "2026-10-22-lunch",
+    date: "2026-10-22",
+    title: "Lunch",
+    startTime: "12:30",
+    endTime: "13:30",
+    duration: 60,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "insadong",
+    order: 30
+  },
+
+  {
+    id: "2026-10-22-insadong",
+    date: "2026-10-22",
+    title: "Insadong / Ssamzigil",
+    startTime: "13:30",
+    endTime: "14:45",
+    duration: 75,
+    type: "shopping",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "insadong",
+    order: 40
+  },
+
+  {
+    id: "2026-10-22-ikseon",
+    date: "2026-10-22",
+    title: "Ikseon-dong",
+    startTime: "14:45",
+    endTime: "15:30",
+    duration: 45,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "ikseon-dong",
+    order: 50
+  },
+
+  {
+    id: "2026-10-22-myeongdong-cathedral",
+    date: "2026-10-22",
+    title: "Myeongdong Cathedral",
+    startTime: "16:00",
+    endTime: "16:30",
+    duration: 30,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "myeongdong-cathedral",
+    order: 60
+  },
+
+  {
+    id: "2026-10-22-n-seoul-tower",
+    date: "2026-10-22",
+    title: "Namsan / N Seoul Tower",
+    startTime: "16:30",
+    endTime: "19:00",
+    duration: 150,
+    type: "attraction",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "n-seoul-tower",
+    notes: "DSP.",
+    dsp: true,
+    order: 70
+  },
+
+  {
+    id: "2026-10-22-myeongdong",
+    date: "2026-10-22",
+    title: "Myeongdong dinner / shopping",
+    startTime: "19:00",
+    endTime: "21:30",
+    duration: 150,
+    type: "food",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "myeongdong-cathedral",
+    order: 80
+  },
+
+
+  /* 23/10 */
+
+  {
+    id: "2026-10-23-hwadam-travel",
+    date: "2026-10-23",
+    title: "🚗 Đi Hwadam Forest",
+    startTime: "06:00",
+    endTime: "08:00",
+    duration: 120,
+    type: "transport",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "hwadam-forest",
+    order: 10
+  },
+
+  {
+    id: "2026-10-23-hwadam",
+    date: "2026-10-23",
+    title: "Hwadam Forest",
+    startTime: "08:00",
+    endTime: "12:00",
+    duration: 240,
+    type: "attraction",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "hwadam-forest",
+    notes: "Khung thời gian chính.",
+    order: 20
+  },
+
+  {
+    id: "2026-10-23-lunch-rest",
+    date: "2026-10-23",
+    title: "Lunch / nghỉ",
+    startTime: "12:00",
+    endTime: "14:00",
+    duration: 120,
+    type: "rest",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "hwadam-forest",
+    order: 30
+  },
+
+  {
+    id: "2026-10-23-banpo",
+    date: "2026-10-23",
+    title: "Banpo Hangang Park",
+    startTime: "16:00",
+    endTime: "20:30",
+    duration: 270,
+    type: "attraction",
+    status: "planned",
+    flexibility: "flexible",
+    placeId: "banpo-hangang-park",
+    notes: "Cruise nếu timing cho phép. Có thể chọn chuyến 16:00 hoặc 17:30.",
+    order: 40
+  },
+
+
+  /* 24/10 */
+
+  {
+    id: "2026-10-24-lotte-world",
+    date: "2026-10-24",
+    title: "Lotte World",
+    startTime: "09:00",
+    endTime: "12:30",
+    duration: 210,
+    type: "attraction",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "lotte-world",
+    order: 10
+  },
+
+  {
+    id: "2026-10-24-coex",
+    date: "2026-10-24",
+    title: "COEX Aquarium",
+    startTime: "14:00",
+    endTime: "15:40",
+    duration: 100,
+    type: "attraction",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "coex-aquarium",
+    notes: "DSP.",
+    dsp: true,
+    order: 20
+  },
+
+  {
+    id: "2026-10-24-airport",
+    date: "2026-10-24",
+    title: "🚆 AREX → Incheon Airport",
+    startTime: "16:30",
+    endTime: "18:00",
+    duration: 90,
+    type: "transport",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "incheon-airport-t1",
+    notes: "Ở khu vực Unseo / sân bay.",
+    order: 30
+  },
+
+
+  /* 25/10 */
+
+  {
+    id: "2026-10-25-flight-icn-han",
+    date: "2026-10-25",
+    title: "✈️ Vietjet – Seoul → Hanoi",
+    startTime: "11:00",
+    endTime: null,
+    duration: null,
+    type: "flight",
+    status: "planned",
+    flexibility: "fixed",
+    placeId: "incheon-airport-t1",
+    notes: "Departure 11:00. ICN Terminal 1.",
+    order: 10
+  }
+
+];
+
+
+/* =========================================================
+   MILESTONES
+   ========================================================= */
+
+const milestones = [
+
+  {
+    id: "flight-han-icn",
+    type: "flight",
+    title: "Vietjet VJ960 – Hanoi → Seoul",
+    date: "2026-10-18",
+    time: "01:40",
+    location: "Hanoi → Incheon T1",
+    status: "confirmed",
+    notes: "Direct / A321 / ICN T1 / 2 passengers"
+  },
+
+  {
+    id: "flight-icn-han",
+    type: "flight",
+    title: "Vietjet – Seoul → Hanoi",
+    date: "2026-10-25",
+    time: "11:00",
+    location: "Incheon T1 → Hanoi",
+    status: "confirmed",
+    notes: "Departure 11:00"
+  }
+
+];
+
+
+/* =========================================================
+   DSP
+   ========================================================= */
+
+const dspAttractions = [
+
+  {
+    id: "football-fantasium",
+    name: "Football Fæntasium",
+    normalPrice: 15000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "seoul-zoo-sky-lift",
+    name: "Seoul Zoo & Sky Lift",
+    normalPrice: 21000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "aquafield-goyang",
+    name: "AQUAFIELD GOYANG – Jjimjil Spa",
+    normalPrice: 26000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "mokdong-ice-rink",
+    name: "Mokdong Ice Rink",
+    normalPrice: 9200,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "lotte-museum-of-art",
+    name: "LOTTE Museum of Art",
+    normalPrice: 20000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "seoul-botanic-park",
+    name: "Seoul Botanic Park",
+    normalPrice: 5000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "n-seoul-tower",
+    name: "N Seoul Tower",
+    normalPrice: 26000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "mmca-seoul",
+    name: "MMCA Seoul",
+    normalPrice: 5000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "suwon-ipark-museum",
+    name: "Suwon Ipark Museum of Art",
+    normalPrice: 4000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "seoul-cruise",
+    name: "Seoul Cruise",
+    normalPrice: 250000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "heolleung-illeung-tombs",
+    name: "Heolleung / Illeung Tombs",
+    normalPrice: 1000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "golden-blue-marina",
+    name: "Golden Blue Marina Kayak / Yacht",
+    normalPrice: 30000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "hanboknam-gyeongbokgung",
+    name: "Hanboknam – Gyeongbokgung",
+    normalPrice: 50000,
+    currency: "KRW",
+    freeWithDSP: true
+  },
+
+  {
+    id: "aquafield-anseong",
+    name: "Aquafield Anseong",
+    normalPrice: 26000,
+    currency: "KRW",
+    freeWithDSP: true
+  }
+
+];
+
+
+/* =========================================================
+   DSP SETTINGS
+   ========================================================= */
+
+const dspMain = {
+
+  passType: "72h",
+
+  activationDate: "2026-10-21",
+
+  activationTime: "15:00",
+
+  expirationDate: "2026-10-24",
+
+  expirationTime: "15:00",
+
+  status: "planned",
+
+  notes:
+    "Dự kiến kích hoạt khoảng 15:00 ngày 21/10 tại Korean Folk Village. Không kích hoạt ngày 19/10 vì Nami Island không dùng DSP. Không đưa Seoraksan vào DSP."
+
+};
+
+
+/* =========================================================
+   TRIP SETTINGS
+   ========================================================= */
+
+const tripSettings = {
+
+  tripId: TRIP_ID,
+
+  name: "Seoul Trip 2026",
+
+  country: "South Korea",
+
+  city: "Seoul",
+
+  startDate: "2026-10-18",
+
+  endDate: "2026-10-25",
+
+  travelers: 2,
+
+  homeBase: "Nowon",
+
+  timezone: "Asia/Seoul",
+
+  currency: "KRW",
+
+  secondaryCurrency: "VND",
+
+  transportPreference: "public_transport",
+
+  avoidRushHour: true,
+
+  avoidGuessedTravelTimes: true,
+
+  notes:
+    "Website hỗ trợ chuyến đi Seoul. Ưu tiên dữ liệu route thực tế từ Google Maps/Naver Map thay vì tự đoán thời gian di chuyển."
+
+};
+
+
+/* =========================================================
+   PLANNING NOTES
+   ========================================================= */
+
+const planningNotes = {
+
+  title: "Planning notes",
+
+  content: `
+Mục tiêu website:
+
+- Theo dõi itinerary thực tế.
+- Có thể thêm địa điểm bất ngờ giữa lịch trình.
+- Theo dõi planned vs actual.
+- Tính ảnh hưởng khi một hoạt động bị trễ.
+- Không tự động phá fixed activity / booking.
+- Theo dõi chi tiêu.
+- Theo dõi Discover Seoul Pass.
+- Lưu địa điểm.
+- Mở Google Maps / Naver Map.
+- Có thể mở rộng thành PWA / offline.
+- Hai vợ chồng cùng sử dụng dữ liệu Firestore.
+
+Nguyên tắc:
+
+1. Không đoán thời gian di chuyển.
+2. Route thực tế sẽ lấy từ Google Maps / Naver Map khi app hoàn thiện.
+3. Fixed activity không tự động bị dịch.
+4. Flexible activity có thể được đề xuất dịch.
+5. Weather chỉ đưa ra cảnh báo/gợi ý, không tự động thay đổi lịch.
+6. Firestore chứa dữ liệu chuyến đi.
+7. Logic xử lý nằm trong JavaScript.
+8. UI state không cần lưu Firestore trừ khi cần chia sẻ.
+`
+
+};
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+const seedPreview = {
+
+  trip: tripSettings,
+
+  places,
+
+  activities,
+
+  milestones,
+
+  dsp: {
+
+    main: dspMain,
+
+    attractions: dspAttractions
+
+  },
+
+  notes: planningNotes
+
+};
+
+preview.textContent = JSON.stringify(seedPreview, null, 2);
+
+
+/* =========================================================
+   COUNTS
+   ========================================================= */
+
+document.getElementById("activityCount").textContent =
+  activities.length;
+
+document.getElementById("placeCount").textContent =
+  places.length;
+
+document.getElementById("dspCount").textContent =
+  dspAttractions.length;
+
+document.getElementById("milestoneCount").textContent =
+  milestones.length;
+
+
+/* =========================================================
+   AUTH
+   ========================================================= */
+
+loginBtn.addEventListener("click", async () => {
+
+  try {
+
+    setStatus("Đang đăng nhập Google...", "info");
+
+    await signInWithPopup(auth, provider);
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "Đăng nhập thất bại: " + error.message,
+      "error"
+    );
+
+  }
+
+});
+
+
+logoutBtn.addEventListener("click", async () => {
+
+  try {
+
+    await signOut(auth);
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "Đăng xuất thất bại: " + error.message,
+      "error"
+    );
+
+  }
+
+});
+
+
+onAuthStateChanged(auth, user => {
+
+  if (user) {
+
+    loginArea.classList.add("hidden");
+
+    userInfo.classList.remove("hidden");
+
+    userName.textContent =
+      user.displayName || "Google User";
+
+    userEmail.textContent =
+      user.email || "";
+
+    userPhoto.src =
+      user.photoURL ||
+      "https://via.placeholder.com/42";
+
+    setStatus(
+      `Đã đăng nhập: ${user.email}`,
+      "success"
+    );
+
+  } else {
+
+    loginArea.classList.remove("hidden");
+
+    userInfo.classList.add("hidden");
+
+    setStatus(
+      "Hãy đăng nhập bằng Google để lưu dữ liệu.",
+      "info"
+    );
+
+  }
+
+});
+
+
+/* =========================================================
+   AUDIT DATA
+   ========================================================= */
+
+function auditData(user) {
+
+  return {
+
+    updatedAt: serverTimestamp(),
+
+    updatedBy: {
+
+      uid: user.uid,
+
+      name: user.displayName || "",
+
+      email: user.email || ""
+
+    }
+
+  };
+
+}
+
+
+/* =========================================================
+   DELETE OLD INVALID DSP STRUCTURE
+   ========================================================= */
+
+/*
+  Nếu trước đây file cũ đã tạo:
+
+  trips/seoul-2026/dsp/attractions
+
+  thì đây là DOCUMENT "attractions".
+
+  Các attraction cũ không thể tồn tại dưới đó như document,
+  vì path 5 segment là invalid.
+
+  Hàm này chỉ xoá document "attractions" nếu nó tồn tại.
+
+  Cấu trúc mới:
+
+  trips/seoul-2026/dsp/main
+  trips/seoul-2026/dsp/football-fantasium
+  ...
+*/
+
+async function cleanupOldDSPStructure() {
+
+  const oldAttractionsRef = doc(
+    db,
+    "trips",
+    TRIP_ID,
+    "dsp",
+    "attractions"
+  );
+
+  try {
+
+    await deleteDoc(oldAttractionsRef);
+
+  } catch (error) {
+
+    /*
+      Nếu document không tồn tại thì Firestore vẫn có thể
+      trả về thành công trong nhiều trường hợp.
+      Không coi đây là lỗi nghiêm trọng.
+    */
+
+    console.warn(
+      "Không cần cleanup DSP structure cũ hoặc document cũ không tồn tại:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE TO FIREBASE
+   ========================================================= */
+
+saveBtn.addEventListener("click", async () => {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+
+    setStatus(
+      "Bạn chưa đăng nhập Google.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  saveBtn.disabled = true;
+
+  setStatus(
+    "Đang lưu dữ liệu vào Firestore...",
+    "info"
+  );
+
+
+  try {
+
+    /*
+      Cleanup document DSP cũ trước.
+    */
+
+    await cleanupOldDSPStructure();
+
+
+    /*
+      Một batch Firestore tối đa 500 writes.
+
+      Dataset hiện tại nhỏ hơn rất nhiều so với giới hạn này.
+    */
+
+    let batch = writeBatch(db);
+
+    let operationCount = 0;
+
+
+    function addSet(path, data, options = { merge: true }) {
+
+      const ref = doc(db, path);
+
+      batch.set(
+        ref,
+        {
+          ...data,
+          ...auditData(user)
+        },
+        options
+      );
+
+      operationCount++;
+
+    }
+
+
+    /* ---------------------------------------------
+       ROOT TRIP
+       --------------------------------------------- */
+
+    addSet(
+      `trips/${TRIP_ID}`,
+      {
+        ...tripSettings,
+
+        createdBy: {
+
+          uid: user.uid,
+
+          name: user.displayName || "",
+
+          email: user.email || ""
+
+        }
+      }
+    );
+
+
+    /* ---------------------------------------------
+       SETTINGS
+       --------------------------------------------- */
+
+    addSet(
+      `trips/${TRIP_ID}/settings/main`,
+      tripSettings
+    );
+
+
+    /* ---------------------------------------------
+       PLACES
+       --------------------------------------------- */
+
+    for (const place of places) {
+
+      addSet(
+        `trips/${TRIP_ID}/places/${place.id}`,
+        place
+      );
+
+    }
+
+
+    /* ---------------------------------------------
+       ACTIVITIES
+       --------------------------------------------- */
+
+    for (const activity of activities) {
+
+      addSet(
+        `trips/${TRIP_ID}/activities/${activity.id}`,
+        activity
+      );
+
+    }
+
+
+    /* ---------------------------------------------
+       MILESTONES
+       --------------------------------------------- */
+
+    for (const milestone of milestones) {
+
+      addSet(
+        `trips/${TRIP_ID}/milestones/${milestone.id}`,
+        milestone
+      );
+
+    }
+
+
+    /* ---------------------------------------------
+       DSP MAIN
+       --------------------------------------------- */
+
+    addSet(
+      `trips/${TRIP_ID}/dsp/main`,
+      dspMain
+    );
+
+
+    /* ---------------------------------------------
+       DSP ATTRACTIONS
+       
+       IMPORTANT:
+       KHÔNG dùng:
+       dsp/attractions/id
+
+       Mà dùng:
+       dsp/id
+       --------------------------------------------- */
+
+    for (const attraction of dspAttractions) {
+
+      addSet(
+        `trips/${TRIP_ID}/dsp/${attraction.id}`,
+        attraction
+      );
+
+    }
+
+
+    /* ---------------------------------------------
+       NOTES
+       --------------------------------------------- */
+
+    addSet(
+      `trips/${TRIP_ID}/notes/planning`,
+      planningNotes
+    );
+
+
+    /* ---------------------------------------------
+       COMMIT
+       --------------------------------------------- */
+
+    await batch.commit();
+
+
+    setStatus(
+      `✓ SAVE THÀNH CÔNG – ${operationCount} documents đã được ghi vào Firestore.`,
+      "success"
+    );
+
+
+  } catch (error) {
+
+    console.error("SAVE ERROR:", error);
+
+    setStatus(
+      "✕ SAVE THẤT BẠI\n\n" + error.message,
+      "error"
+    );
+
+  } finally {
+
+    saveBtn.disabled = false;
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
