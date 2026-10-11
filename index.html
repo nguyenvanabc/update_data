@@ -179,7 +179,7 @@
 
   <h1>🇰🇷 Seoul Trip 2026</h1>
   <div class="subtitle">
-    Firebase / Firestore data setup (Updated Full Itinerary)
+    Firebase / Firestore data setup (Restored Descriptions & Updated Itinerary)
   </div>
 
   <div id="status" class="status info">
@@ -408,7 +408,13 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Nowon-gu%20Seoul",
     description: `<div class="place-description">
   <h4>🏡 Nowon-gu (노원구) – Khu dân cư xanh & Thủ phủ giáo dục phía Bắc Seoul</h4>
-  <p><b>Lịch sử & Phát triển:</b> Tên gọi "Nowon" xuất phát từ thời triều đại Joseon, nguyên nghĩa là "cánh đồng lau sậy" nằm ở cửa ngõ phía Bắc kinh thành Hanyang.</p>
+  <p><b>Lịch sử & Phát triển:</b> Tên gọi "Nowon" xuất phát từ thời triều đại Joseon, nguyên nghĩa là "cánh đồng lau sậy" nằm ở cửa ngõ phía Bắc kinh thành Hanyang. Trong lịch sử, đây từng là trạm dừng chân quan trọng của du khách và thương nhân di chuyển giữa Seoul và các tỉnh phía Bắc. Đến thập niên 1980, chính quyền thành phố Seoul thực hiện quy hoạch đô thị hóa quy mô lớn, biến Nowon từ khu vực nông nghiệp thành một quận đô thị hiện đại với hạ tầng giao thông đồng bộ.</p>
+  <p><b>Đặc điểm nổi bật:</b> Nowon nằm dưới chân hai ngọn núi hùng vĩ là Suraksan và Buramsan, đem lại không gian sống thoáng đãng, nhiều cây xanh và không khí trong lành vượt trội so với khu trung tâm sầm uất. Quận sở hữu hệ thống công viên sinh thái dốc núi cùng các tuyến đường đi bộ ven sông Jungnangcheon vô cùng thơ mộng.</p>
+  <p><b>Sự thật thú vị (Facts):</b></p>
+  <ul>
+    <li><b>Thủ phủ giáo dục:</b> Phường Junggye-dong thuộc quận Nowon được mệnh danh là "Daechi-dong của phía Bắc", nơi tập trung hàng trăm trung tâm học thêm (Hagwon) uy tín, là nơi đào tạo ra nhiều thế hệ học sinh xuất sắc của Hàn Quốc.</li>
+    <li><b>Kết nối giao thông:</b> Nhờ có các tuyến tàu điện ngầm huyết mạch Line 4 và Line 7, từ Nowon có thể di chuyển thẳng tới các điểm du lịch lớn như Myeongdong, Dongdaemun hay Gangnam mà không cần chuyển tàu.</li>
+  </ul>
 </div>`
   },
   {
@@ -421,7 +427,8 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/67-6%20Changgyeonggung-ro%20Jung-gu%20Seoul",
     description: `<div class="place-description">
   <h4>🏨 Life in Cheonggye Hotel – Khách sạn lưu trú chính từ ngày 20/10</h4>
-  <p>Khách sạn nằm tại khu vực trung tâm gần suối Cheonggyecheon, thuận tiện gửi hành lý và di chuyển đi các chợ truyền thống, cung điện và khu mua sắm.</p>
+  <p><b>Vị trí & Tiện ích:</b> Khách sạn tọa lạc tại khu vực trung tâm Jongno/Jung-gu sát bên dòng suối lịch sử Cheonggyecheon. Từ đây, du khách có thể đi bộ dễ dàng đến Chợ Gwangjang, Chợ Dongmyo, khu phố cổ Ikseon-dong và các cung điện lớn.</p>
+  <p>Là điểm tựa lý tưởng để cất gửi hành lý và bắt đầu lịch trình khám phá trung tâm Seoul từ ngày 20/10 trở đi.</p>
 </div>`
   },
   {
@@ -434,6 +441,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Incheon%20International%20Airport%20Terminal%201",
     description: `<div class="place-description">
   <h4>✈️ Incheon International Airport T1 (인천국제공항 제1여객터미널)</h4>
+  <p><b>Lịch sử hình thành:</b> Được chính thức khai trương vào tháng 3 năm 2001 nhằm thay thế cho Sân bay Gimpo đã quá tải, Sân bay Quốc tế Incheon là công trình cơ sở hạ tầng hàng không lớn nhất Hàn Quốc.</p>
 </div>`
   },
   {
@@ -446,6 +454,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Kyung%20Hee%20University",
     description: `<div class="place-description">
   <h4>🏛️ Kyung Hee University (경희대학교) – Đỉnh cao kiến trúc Gothic giữa lòng Seoul</h4>
+  <p><b>Lịch sử & Sứ mệnh:</b> Thành lập vào năm 1949 bởi Tiến sĩ Young Seek Choue với triết lý "Sáng tạo một thế giới văn minh", Đại học Kyung Hee nổi tiếng thế giới về kiến trúc Tân Gothic Châu Âu và khuôn viên ngợp hoa anh đào.</p>
 </div>`
   },
   {
@@ -458,6 +467,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Hwarangdae%20Railway%20Park",
     description: `<div class="place-description">
   <h4>🚂 Hwarangdae Railway Park (화랑대철도공원) – Công viên di sản đường sắt hoài cổ</h4>
+  <p><b>Lịch sử biến đổi:</b> Ga Hwarangdae xây dựng năm 1939 thuộc tuyến Gyeongchun Line cũ, nay được bảo tồn thành công viên văn hóa đường sắt độc đáo với hệ thống vườn ánh sáng ban đêm.</p>
 </div>`
   },
   {
@@ -470,6 +480,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Nami%20Island",
     description: `<div class="place-description">
   <h4>🍁 Nami Island (남이섬) – Đảo ngọc tình yêu & Biểu tượng Hallyu huyền thoại</h4>
+  <p><b>Nguồn gốc:</b> Hòn đảo hình bán nguyệt nổi tiếng với hàng cây Metasequoia, Ginkgo và bối cảnh quay bộ phim kinh điển <i>Bản Tình Ca Mùa Đông</i>.</p>
 </div>`
   },
   {
@@ -482,6 +493,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Gwangjang%20Market",
     description: `<div class="place-description">
   <h4>🥞 Gwangjang Market (광장시장) – Chợ truyền thống 100 năm tuổi & Thiên đường ẩm thực</h4>
+  <p><b>Lịch sử lâu đời:</b> Thành lập năm 1905, là chợ tư nhân cố định đầu tiên của Hàn Quốc, nổi tiếng với bindaetteok, mayak gimbap và các quầy ẩm thực truyền thống.</p>
 </div>`
   },
   {
@@ -494,6 +506,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Dongmyo%20Flea%20Market",
     description: `<div class="place-description">
   <h4>📜 Dongmyo Flea Market (동묘 벼룩시장) – Chợ đồ cũ Vintage độc đáo nhất Seoul</h4>
+  <p><b>Nguồn gốc:</b> Chợ đồ cũ hình thành từ thập niên 1980 xung quanh Đền Dongmyo, là thiên đường săn đồ vintage, áo khoác dạ, cardigan giá rẻ.</p>
 </div>`
   },
   {
@@ -506,6 +519,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Ewha%20Womans%20University",
     description: `<div class="place-description">
   <h4>🌸 Ewha Womans University (이화여자대학교) – Đại học nữ thục hàng đầu thế giới</h4>
+  <p><b>Kiến trúc:</b> Nổi tiếng với công trình thung lũng kính ngầm ECC (Ewha Campus Complex) do kiến trúc sư Dominique Perrault thiết kế và phố mua sắm sầm uất ngay cổng trường.</p>
 </div>`
   },
   {
@@ -518,6 +532,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Haneul%20Park",
     description: `<div class="place-description">
   <h4>🌾 Haneul Park (하늘공원) – Công viên Bầu trời & Kỳ tích sinh thái</h4>
+  <p><b>Kỳ tích phục hồi sinh thái:</b> Biến bãi rác cũ thành công viên sinh thái trên đồi cao, địa điểm tổ chức Seoul Silver Grass Festival với đồng cỏ lau bạt ngàn và media art.</p>
 </div>`
   },
   {
@@ -530,6 +545,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Suwon%20Hwaseong",
     description: `<div class="place-description">
   <h4>🏰 Suwon Hwaseong Fortress (수원화성) – Kiệt tác pháo đài Di sản UNESCO</h4>
+  <p><b>Lịch sử:</b> Xây dựng dưới thời Vua Jeongjo triều Joseon, kết hợp kỹ thuật quân sự Đông-Tây, là Di sản Văn hóa Thế giới được UNESCO công nhận.</p>
 </div>`
   },
   {
@@ -542,6 +558,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Starfield%20Suwon",
     description: `<div class="place-description">
   <h4>📚 Starfield Suwon (스타필드 수원) – Kỳ quan mua sắm & Thư viện viễn tưởng</h4>
+  <p><b>Điểm nhấn:</b> Sở hữu Thư viện Starfield (Byeolmadang Library) uốn lượn cao 22 mét mang phong cách viễn tưởng.</p>
 </div>`
   },
   {
@@ -554,6 +571,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Korean%20Folk%20Village",
     description: `<div class="place-description">
   <h4>🏺 Korean Folk Village (한국민속촌) – Bảo tàng sống về đời sống thời Joseon</h4>
+  <p><b>Quy mô:</b> Bảo tàng ngoài trời tái hiện nguyên vẹn nhà cổ, văn hóa và phong tục tập quán thời Joseon.</p>
 </div>`
   },
   {
@@ -566,6 +584,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/43%20Jahamun-ro%20Jongno-gu%20Seoul",
     description: `<div class="place-description">
   <h4>☕ LEEDORIM Coffee & Bakery – Quán brunch/cà phê gần Gyeongbokgung</h4>
+  <p>Địa điểm lý tưởng để thưởng thức bữa sáng/brunch nhẹ trước khi bắt đầu hành trình tham quan cung điện.</p>
 </div>`
   },
   {
@@ -578,6 +597,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Gyeongbokgung",
     description: `<div class="place-description">
   <h4>👑 Gyeongbokgung Palace (경복궁) – Cung Cảnh Phúc & Trái tim lịch sử Triều đại Joseon</h4>
+  <p><b>Lịch sử:</b> Hoàng cung lớn nhất triều đại Joseon xây dựng năm 1395, miễn phí vé vào cửa khi mặc trang phục Hanbok truyền thống.</p>
 </div>`
   },
   {
@@ -590,6 +610,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Bukchon%20Hanok%20Village",
     description: `<div class="place-description">
   <h4>🏘️ Bukchon Hanok Village (북촌한옥마을) – Làng cổ 600 năm tuổi giữa lòng thủ đô</h4>
+  <p>Khu dân cư lịch sử bảo tồn khoảng 900 ngôi nhà gỗ truyền thống Hanok của giới quý tộc Yangban xưa.</p>
 </div>`
   },
   {
@@ -602,6 +623,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Insadong%20Ssamzigil",
     description: `<div class="place-description">
   <h4>🎨 Insadong & Ssamzigil (인사동 / 쌈지길) – Phố nghệ thuật & Đồ thủ công mỹ nghệ</h4>
+  <p>Trung tâm văn hóa truyền thống với các cửa hàng đồ gốm, tranh vẽ, bảng hiệu chữ Hàn độc đáo và trung tâm Ssamzigil.</p>
 </div>`
   },
   {
@@ -614,6 +636,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Ikseon-dong",
     description: `<div class="place-description">
   <h4>☕ Ikseon-dong Hanok Village (익선동) – Con phố Hanok Hipster quyến rũ nhất</h4>
+  <p>Khu phố Hanok cải tiến kết hợp quán cà phê specialty, tiệm bánh và nhà hàng fusion phong cách retro.</p>
 </div>`
   },
   {
@@ -626,6 +649,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Myeongdong%20Cathedral",
     description: `<div class="place-description">
   <h4>⛪ Myeongdong Cathedral (명동성당) – Nhà thờ Công giáo Gothic đầu tiên tại Hàn Quốc</h4>
+  <p>Công trình kiến trúc Gothic bằng gạch nung hoàn thành năm 1898, biểu tượng lịch sử và tinh thần của Công giáo Hàn Quốc.</p>
 </div>`
   },
   {
@@ -638,6 +662,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/N%20Seoul%20Tower",
     description: `<div class="place-description">
   <h4>🗼 N Seoul Tower (N서울타워) – Tháp truyền hình Namsan & Biểu tượng tình yêu</h4>
+  <p>Tọa độ ngắm toàn cảnh Seoul từ hoàng hôn sang thành phố lên đèn, nổi tiếng với ổ khóa tình yêu.</p>
 </div>`
   },
   {
@@ -650,6 +675,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/200%20Sinbanpo-ro%20Seocho-gu%20Seoul",
     description: `<div class="place-description">
   <h4>🛍️ Goto Mall – Trung tâm mua sắm ngầm bến xe buýt tốc hành Gangnam</h4>
+  <p>Thiên đường mua sắm ngầm với hàng trăm cửa hàng thời trang mùa thu, áo len, chân váy giá siêu mềm từ 10k-15k₩.</p>
 </div>`
   },
   {
@@ -662,6 +688,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Hwadam%20Forest",
     description: `<div class="place-description">
   <h4>🌲 Hwadam Forest (화담숲) – Khu sinh thái bảo tồn thiên nhiên tuyệt mỹ</h4>
+  <p>Khu bảo tồn sinh thái nổi tiếng với mùa lá phong đỏ rực rỡ và hệ thống tàu điện Monorail xuyên rừng.</p>
 </div>`
   },
   {
@@ -674,6 +701,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Banpo%20Hangang%20Park",
     description: `<div class="place-description">
   <h4>🌊 Banpo Hangang Park (반포한강공원) – Công viên ven sông & Đài phun nước Cầu Banpo</h4>
+  <p>Công viên ven sông Hàn nổi tiếng với đài phun nước cầu ánh sáng kỷ lục Guinness và dịch vụ du thuyền Seoul Cruise.</p>
 </div>`
   },
   {
@@ -686,6 +714,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Lotte%20World",
     description: `<div class="place-description">
   <h4>🏰 Lotte World (롯데월드) – Phức hợp giải trí huyền thoại trong lòng Seoul</h4>
+  <p>Công viên giải trí gồm khu trong nhà Adventure và đảo phép thuật ngoài trời Magic Island bên hồ Seokchon.</p>
 </div>`
   },
   {
@@ -698,6 +727,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/COEX%20Aquarium",
     description: `<div class="place-description">
   <h4>🦈 COEX Aquarium (코엑스 아쿠아리움) – Thủy cung đại dương giữa trung tâm Gangnam</h4>
+  <p>Thủy cung lớn với hơn 40.000 sinh vật biển và đường hầm kính dưới lòng đại dương ngay giữa trung tâm Gangnam.</p>
 </div>`
   },
   {
@@ -710,6 +740,7 @@ const places = [
     naverMapsUrl: "https://map.naver.com/p/search/Unseo%20Station",
     description: `<div class="place-description">
   <h4>🏨 Unseo Area (운서동) – Đô thị vệ tinh tiện nghi ngay sát Sân bay Incheon</h4>
+  <p>Khu vực lưu trú thuận tiện sát sân bay Incheon, kết nối bằng tàu AREX phục vụ cho ngày bay về.</p>
 </div>`
   }
 ];
@@ -948,7 +979,7 @@ const activities = [
     status: "planned",
     flexibility: "flexible",
     placeId: "haneul-park",
-    notes: "Đi xe điện/đi bộ lên đồi ngắm biển cỏ lau, ngắm hoàng hôn nhuộm vàng view sông Hàn, thưởng thức Lighting / Media Art festival buổi tối. Về khách sạn lúc ~21:30.",
+    notes: "Đi xe điện/đi bộ lên đồi ngắm biển cỏ lau, ngắm hoàng hôn nhuộm vàng view sông Hàn, thưởng thức Lighting / Media Art festival buổi tối. Về khách sạn Life in Cheonggye lúc ~21:30.",
     order: 40
   },
 
@@ -966,7 +997,7 @@ const activities = [
     status: "planned",
     flexibility: "flexible",
     placeId: "suwon-hwaseong",
-    notes: "07:00 đi từ Seoul sang Suwon bằng Line 1. Tham quan Changnyongmun, tường thành, Yongyeon, Hwaseong Haenggung và dạo phố Haengnidan-gil.",
+    notes: "07:00 xuất phát từ khách sạn Life in Cheonggye đi Suwon bằng Line 1. Tham quan Changnyongmun, tường thành, Yongyeon, Hwaseong Haenggung và dạo phố Haengnidan-gil.",
     order: 10
   },
 
@@ -996,7 +1027,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "korean-folk-village",
-    notes: "Kích hoạt Discover Seoul Pass (72h) lúc 15:00 tại đây. Tham quan làng dân gian, ăn tối ngay trong làng và di chuyển về Seoul lúc ~20:30.",
+    notes: "Kích hoạt Discover Seoul Pass (72h) lúc 15:00 tại đây. Tham quan làng dân gian, ăn tối ngay trong làng và di chuyển về khách sạn Life in Cheonggye lúc ~20:30.",
     dsp: true,
     order: 30
   },
@@ -1015,7 +1046,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "gyeongbokgung",
-    notes: "07:30 rời khách sạn, ăn sáng/brunch nhẹ tại LEEDORIM Coffee & Bakery. Thuê Hanbok lúc 08:40. Vào Gyeongbokgung (Dùng DSP) từ 09:00 - 11:00. Tiếp tục đi Bukchon Hanok Village (11:00 - 12:30).",
+    notes: "07:30 rời khách sạn Life in Cheonggye, ăn sáng/brunch nhẹ tại LEEDORIM Coffee & Bakery. Thuê Hanbok lúc 08:40. Vào Gyeongbokgung (Dùng DSP) từ 09:00 - 11:00. Tiếp tục đi Bukchon Hanok Village (11:00 - 12:30).",
     dsp: true,
     order: 10
   },
@@ -1046,7 +1077,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "n-seoul-tower",
-    notes: "Đi bộ sang Myeongdong Cathedral tham quan kiến trúc (16:00-16:30). Lên Namsan Park dạo đường lá vàng, ngắm hoàng hôn sang thành phố lên đèn, tùy chọn cáp treo/thang máy lên tháp (Dùng DSP). Tối về Myeongdong ăn tối, mua sắm hoặc ghé Goto Mall săn đồ thu 10k-15k₩. Về nghỉ lúc ~21:30.",
+    notes: "Đi bộ sang Myeongdong Cathedral tham quan kiến trúc (16:00-16:30). Lên Namsan Park dạo đường lá vàng, ngắm hoàng hôn sang thành phố lên đèn, tùy chọn cáp treo/thang máy lên tháp (Dùng DSP). Tối về Myeongdong ăn tối, mua sắm hoặc ghé Goto Mall săn đồ thu 10k-15k₩. Về khách sạn Life in Cheonggye lúc ~21:30.",
     dsp: true,
     order: 30
   },
@@ -1065,7 +1096,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "hwadam-forest",
-    notes: "06:00 rời khách sạn đi Hwadam Forest (Gwangju). Ăn sáng tại cổng/resort. 09:00 - 12:00 khám phá rừng lá đỏ (Monorail + đi bộ). 12:00 - 14:00 ăn trưa và nghỉ ngơi.",
+    notes: "06:00 rời khách sạn Life in Cheonggye đi Hwadam Forest (Gwangju). Ăn sáng tại cổng/resort. 09:00 - 12:00 khám phá rừng lá đỏ (Monorail + đi bộ). 12:00 - 14:00 ăn trưa và nghỉ ngơi.",
     order: 10
   },
 
@@ -1080,7 +1111,7 @@ const activities = [
     status: "planned",
     flexibility: "flexible",
     placeId: "banpo-hangang-park",
-    notes: "Di chuyển về Banpo Hangang Park. Đi du thuyền Seoul Cruise chuyến 16:00 hoặc 17:30. Ăn tối bên bờ sông Hàn. Về khách sạn lúc 20:30.",
+    notes: "Di chuyển về Banpo Hangang Park. Đi du thuyền Seoul Cruise chuyến 16:00 hoặc 17:30. Ăn tối bên bờ sông Hàn. Về khách sạn Life in Cheonggye lúc 20:30.",
     order: 20
   },
 
@@ -1098,7 +1129,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "lotte-world",
-    notes: "Ăn sáng/brunch khu Jamsil, thuê đồng phục học sinh. 09:00 - 12:30 vui chơi & chụp ảnh mùa thu tại Lotte World (Magic Island & Indoor Adventure). Ăn trưa nhẹ.",
+    notes: "07:45 xuất phát từ khách sạn Life in Cheonggye, ăn sáng/brunch khu Jamsil, thuê đồng phục học sinh. 09:00 - 12:30 vui chơi & chụp ảnh mùa thu tại Lotte World. Ăn trưa nhẹ.",
     order: 10
   },
 
@@ -1113,7 +1144,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "coex-aquarium",
-    notes: "Di chuyển sang COEX (Line 2). Tham quan SEA LIFE COEX Aquarium (14:00 - 15:40) (Dùng DSP - Hết hạn DSP lúc 15:00). 15:40 về khách sạn lấy hành lý. 16:30 bắt tàu AREX từ Ga Seoul ra Sân bay Incheon T1. 18:30 check-in khách sạn/phòng nghỉ khu vực Ga Unseo.",
+    notes: "Di chuyển sang COEX (Line 2). Tham quan SEA LIFE COEX Aquarium (14:00 - 15:40) (Dùng DSP - Hết hạn DSP lúc 15:00). 15:40 về khách sạn Life in Cheonggye lấy hành lý. 16:30 bắt tàu AREX từ Ga Seoul ra Sân bay Incheon T1. 18:30 check-in khách sạn/phòng nghỉ khu vực Ga Unseo.",
     dsp: true,
     order: 20
   },
@@ -1132,7 +1163,7 @@ const activities = [
     status: "planned",
     flexibility: "fixed",
     placeId: "incheon-airport-t1",
-    notes: "07:30 dậy trả phòng, 08:00 có mặt tại Terminal 1 Incheon Airport gửi hành lý, hoàn thuế (Tax Refund), xuất cảnh. Bay 11:00 về Hà Nội.",
+    notes: "07:30 dậy trả phòng tại Unseo, 08:00 có mặt tại Terminal 1 Incheon Airport gửi hành lý, hoàn thuế (Tax Refund), xuất cảnh. Bay 11:00 về Hà Nội.",
     order: 10
   }
 
@@ -1375,7 +1406,7 @@ const planningNotes = {
 Mục tiêu website:
 
 - Theo dõi itinerary thực tế theo lịch trình hoàn chỉnh.
-- Quản lý 2 nơi lưu trú: Nowon và Life in Cheonggye.
+- Quản lý 2 nơi lưu trú: Nowon và Life in Cheonggye Hotel.
 - Theo dõi Discover Seoul Pass 72h (Kích hoạt 21/10 15:00).
 - Lưu địa điểm, tích hợp Google Maps & Naver Map.
 - Đồng bộ dữ liệu Firestore cho 2 vợ chồng cùng sử dụng.
